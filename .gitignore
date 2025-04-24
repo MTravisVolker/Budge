@@ -66,4 +66,12 @@ cypress/screenshots/
 
 # Misc
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Certificate files
+certs/*.crt
+certs/*.key
+certs/*.pem
+certs/*.pfx
+certs/*.cer
+certs/*.der
