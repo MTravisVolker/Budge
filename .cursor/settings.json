@@ -1,0 +1,39 @@
+{
+  "editor": {
+    "formatOnSave": true,
+    "formatOnPaste": true,
+    "tabSize": 4,
+    "insertSpaces": true
+  },
+  "files": {
+    "exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.venv": true,
+      "**/node_modules": true
+    }
+  },
+  "search": {
+    "exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/.git": true
+    }
+  },
+  "python": {
+    "linting": {
+      "enabled": true,
+      "pylintEnabled": true,
+      "flake8Enabled": true
+    }
+  },
+  "typescript": {
+    "tsdk": "node_modules/typescript/lib"
+  }
+}

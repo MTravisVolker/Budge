@@ -3,10 +3,11 @@
 ## Phase 1: Initial Setup and Development Environment
 
 ### Project Setup
+
 - [ ] Create GitHub repository with monorepo structure
 - [ ] Initialize Git with `.gitignore` for Python, Node.js, and development files
 - [ ] Set up branch protection rules (require PRs, signed commits)
-- [X] Create initial project structure:
+- [x] Create initial project structure:
   ```
   budg/
   ├── backend/
@@ -21,14 +22,16 @@
   ```
 
 ### Development Environment
-- [ ] Set up Python virtual environment for backend
-- [ ] Install Node.js dependencies for frontend
-- [ ] Configure VS Code workspace settings
-- [ ] Set up local HTTPS certificates for development
-- [ ] Configure local PostgreSQL instance
-- [ ] Set up pgAdmin for database management
+
+- [x] Set up Python virtual environment for backend
+- [x] Install Node.js dependencies for frontend
+- [x] Configure VS Code workspace settings
+- [x] Set up local HTTPS certificates for development
+- [X] Configure local PostgreSQL instance
+- [X] Set up pgAdmin for database management
 
 ### Authentication Setup
+
 - [ ] Create Google Developer account and project
 - [ ] Create Facebook Developer account and project
 - [ ] Configure OAuth2 credentials for both providers
@@ -37,6 +40,7 @@
 ## Phase 2: Backend Development
 
 ### FastAPI Setup
+
 - [ ] Install FastAPI and dependencies
 - [ ] Configure FastAPI settings (CORS, middleware, etc.)
 - [ ] Set up SQLAlchemy with PostgreSQL
@@ -45,6 +49,7 @@
 - [ ] Implement OAuth2 integration
 
 ### Database Implementation
+
 - [ ] Create PostgreSQL database schema
 - [ ] Implement SQLAlchemy models
 - [ ] Set up database migrations
@@ -52,6 +57,7 @@
 - [ ] Implement audit logging triggers
 
 ### API Development
+
 - [ ] Create CRUD endpoints for all entities
 - [ ] Implement authentication endpoints
 - [ ] Set up rate limiting
@@ -61,6 +67,7 @@
 ## Phase 3: Frontend Development
 
 ### React Setup
+
 - [ ] Initialize React application
 - [ ] Configure Bootstrap and styling
 - [ ] Set up React Router
@@ -68,6 +75,7 @@
 - [ ] Implement authentication flow
 
 ### UI Components
+
 - [ ] Create spreadsheet-like table component
 - [ ] Implement modal system
 - [ ] Create date range selector
@@ -75,6 +83,7 @@
 - [ ] Implement drag-and-drop functionality
 
 ### Feature Implementation
+
 - [ ] Create bill management interface
 - [ ] Implement bank account management
 - [ ] Build category management
@@ -84,6 +93,7 @@
 ## Phase 4: Testing and Documentation
 
 ### Testing Setup
+
 - [ ] Configure pytest for backend
 - [ ] Set up Jest and React Testing Library
 - [ ] Configure Cypress for E2E testing
@@ -91,6 +101,7 @@
 - [ ] Implement CI/CD pipeline
 
 ### Documentation
+
 - [ ] Set up Swagger UI for API docs
 - [ ] Configure Sphinx for Python docs
 - [ ] Set up Storybook for React components
@@ -100,6 +111,7 @@
 ## Phase 5: Monitoring and Security
 
 ### Monitoring Setup
+
 - [ ] Install and configure Prometheus
 - [ ] Set up Grafana dashboards
 - [ ] Configure Sentry for error tracking
@@ -107,6 +119,7 @@
 - [ ] Implement logging system
 
 ### Security Implementation
+
 - [ ] Configure SSL/TLS
 - [ ] Set up security headers
 - [ ] Implement rate limiting
@@ -116,6 +129,7 @@
 ## Phase 6: Local Deployment
 
 ### Server Setup
+
 - [ ] Configure Uvicorn for FastAPI
 - [ ] Set up Nginx for React
 - [ ] Configure SSL certificates
@@ -123,6 +137,7 @@
 - [ ] Configure PostgreSQL for production
 
 ### Performance Optimization
+
 - [ ] Implement caching strategies
 - [ ] Optimize database queries
 - [ ] Configure compression
@@ -132,6 +147,7 @@
 ## Phase 7: Maintenance and Updates
 
 ### Regular Maintenance
+
 - [ ] Set up automated backups
 - [ ] Configure log rotation
 - [ ] Implement security updates
@@ -139,8 +155,9 @@
 - [ ] Configure error reporting
 
 ### Future Planning
+
 - [ ] Document scaling strategies
 - [ ] Plan for cloud migration
 - [ ] Consider mobile app development
 - [ ] Plan for multi-currency support
-- [ ] Consider custom recurrence logic 
+- [ ] Consider custom recurrence logic
