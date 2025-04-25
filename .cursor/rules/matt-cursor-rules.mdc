@@ -10,7 +10,7 @@ alwaysApply: true
 - You can use markdown but dont have to
 
 
-
+- I'm on Windows PowerShell. Always give me commands for Windows PowerShell.
 - Always look for existing code to iterate on instead of creating new code.
 - Do not drastically change the patterns before trying to iterate on existing patterns.
 - Avoid duplication of code whenever possible, which means checking for other areas of the codebase that might already have similar code and functionality
