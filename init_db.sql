@@ -4,8 +4,83 @@ CREATE DATABASE budg;
 -- Connect to the database
 \c budg;
 
--- Enable UUID extension
+-- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Create encryption key table (for column-level encryption)
+CREATE TABLE encryption_keys (
+    id SERIAL PRIMARY KEY,
+    key_name VARCHAR(50) NOT NULL UNIQUE,
+    key_value BYTEA NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Create audit logging function
+CREATE OR REPLACE FUNCTION log_changes()
+RETURNS TRIGGER AS $$
+DECLARE
+    user_id UUID;
+    table_name TEXT;
+    row_id INTEGER;
+    field_name TEXT;
+    old_value TEXT;
+    new_value TEXT;
+    action TEXT;
+BEGIN
+    -- Get the table name
+    table_name := TG_TABLE_NAME;
+
+    -- Determine the action type
+    IF (TG_OP = 'INSERT') THEN
+        action := 'add';
+        row_id := NEW.id;
+        user_id := NEW.user_id;
+
+        -- Log all fields for new records
+        FOR field_name IN SELECT column_name FROM information_schema.columns
+                         WHERE table_name = TG_TABLE_NAME AND column_name != 'id' LOOP
+            EXECUTE format('SELECT ($1).%I::text', field_name) USING NEW INTO new_value;
+            INSERT INTO audit_log (user_id, table_name, row_id, field_name, action, value_after_change)
+            VALUES (user_id, table_name, row_id, field_name, action, new_value);
+        END LOOP;
+
+    ELSIF (TG_OP = 'UPDATE') THEN
+        action := 'update';
+        row_id := NEW.id;
+        user_id := NEW.user_id;
+
+        -- Log only changed fields
+        FOR field_name IN SELECT column_name FROM information_schema.columns
+                         WHERE table_name = TG_TABLE_NAME AND column_name != 'id' LOOP
+            EXECUTE format('SELECT ($1).%I::text, ($2).%I::text', field_name, field_name)
+            USING OLD, NEW INTO old_value, new_value;
+
+            IF (old_value IS DISTINCT FROM new_value) THEN
+                INSERT INTO audit_log (user_id, table_name, row_id, field_name, action,
+                                     value_before_change, value_after_change)
+                VALUES (user_id, table_name, row_id, field_name, action, old_value, new_value);
+            END IF;
+        END LOOP;
+
+    ELSIF (TG_OP = 'DELETE') THEN
+        action := 'delete';
+        row_id := OLD.id;
+        user_id := OLD.user_id;
+
+        -- Log all fields for deleted records
+        FOR field_name IN SELECT column_name FROM information_schema.columns
+                         WHERE table_name = TG_TABLE_NAME AND column_name != 'id' LOOP
+            EXECUTE format('SELECT ($1).%I::text', field_name) USING OLD INTO old_value;
+            INSERT INTO audit_log (user_id, table_name, row_id, field_name, action, value_before_change)
+            VALUES (user_id, table_name, row_id, field_name, action, old_value);
+        END LOOP;
+    END IF;
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Create tables
 CREATE TABLE "user" (
@@ -125,6 +200,47 @@ CREATE TABLE audit_log (
     value_after_change TEXT,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Create triggers for all tables except audit_log
+CREATE TRIGGER log_user_changes
+    AFTER INSERT OR UPDATE OR DELETE ON "users"
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_api_token_changes
+    AFTER INSERT OR UPDATE OR DELETE ON api_token
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_oauth_account_changes
+    AFTER INSERT OR UPDATE OR DELETE ON oauth_account
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_bill_status_changes
+    AFTER INSERT OR UPDATE OR DELETE ON bill_status
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_recurrence_changes
+    AFTER INSERT OR UPDATE OR DELETE ON recurrence
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_category_changes
+    AFTER INSERT OR UPDATE OR DELETE ON category
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_bank_account_changes
+    AFTER INSERT OR UPDATE OR DELETE ON bank_account
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_bills_changes
+    AFTER INSERT OR UPDATE OR DELETE ON bills
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_due_bills_changes
+    AFTER INSERT OR UPDATE OR DELETE ON due_bills
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
+
+CREATE TRIGGER log_bank_account_instance_changes
+    AFTER INSERT OR UPDATE OR DELETE ON bank_account_instance
+    FOR EACH ROW EXECUTE FUNCTION log_changes();
 
 -- Create indexes
 CREATE INDEX idx_api_token_user_id ON api_token(user_id);
