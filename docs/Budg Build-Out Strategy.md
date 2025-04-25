@@ -5,14 +5,14 @@
 ### Project Setup
 
 <<<<<<< HEAD
+
 - [ ] Create GitHub repository with monorepo structure
 - [ ] Initialize Git with `.gitignore` for Python, Node.js, and development files
-- [ ] Set up branch protection rules (require PRs, signed commits)
-=======
+- [ ] # Set up branch protection rules (require PRs, signed commits)
 - [x] Create GitHub repository with monorepo structure
 - [x] Initialize Git with `.gitignore` for Python, Node.js, and development files
 - [x] Set up branch protection rules (require PRs, signed commits)
->>>>>>> 94c46228615bba750db54611075130a0d9d2d7d0
+  > > > > > > > 94c46228615bba750db54611075130a0d9d2d7d0
 - [x] Create initial project structure:
   ```
   budg/
@@ -32,23 +32,13 @@
 - [x] Set up Python virtual environment for backend
 - [x] Install Node.js dependencies for frontend
 - [x] Configure VS Code workspace settings
-<<<<<<< HEAD
 - [x] Set up local HTTPS certificates for development
-- [X] Configure local PostgreSQL instance
-- [X] Set up pgAdmin for database management
+- [x] Configure local PostgreSQL instance
+- [x] Set up pgAdmin for database management
 
 ### Authentication Setup
 
-- [X] Create Google Developer account and project
-=======
-- [ ] Set up local HTTPS certificates for development
-- [ ] Configure local PostgreSQL instance
-- [ ] Set up pgAdmin for database management
-
-### Authentication Setup
-
-- [ ] Create Google Developer account and project
->>>>>>> 94c46228615bba750db54611075130a0d9d2d7d0
+- [x] Create Google Developer account and project
 - [ ] Create Facebook Developer account and project
 - [ ] Configure OAuth2 credentials for both providers
 - [ ] Set up local development domains in OAuth providers
@@ -57,31 +47,17 @@
 
 ### FastAPI Setup
 
-<<<<<<< HEAD
-- [X] Install FastAPI and dependencies
-- [X] Configure FastAPI settings (CORS, middleware, etc.)
-- [X] Set up SQLAlchemy with PostgreSQL
-- [X] Configure FastAPI Users for authentication
-- [X] Set up JWT token handling
-- [X] Implement OAuth2 integration
+- [x] Install FastAPI and dependencies
+- [x] Configure FastAPI settings (CORS, middleware, etc.)
+- [x] Set up SQLAlchemy with PostgreSQL
+- [x] Configure FastAPI Users for authentication
+- [x] Set up JWT token handling
+- [x] Implement OAuth2 integration
 
 ### Database Implementation
 
-- [X] Create PostgreSQL database schema
-- [X] Implement SQLAlchemy models
-=======
-- [ ] Install FastAPI and dependencies
-- [ ] Configure FastAPI settings (CORS, middleware, etc.)
-- [ ] Set up SQLAlchemy with PostgreSQL
-- [ ] Configure FastAPI Users for authentication
-- [ ] Set up JWT token handling
-- [ ] Implement OAuth2 integration
-
-### Database Implementation
-
-- [ ] Create PostgreSQL database schema
-- [ ] Implement SQLAlchemy models
->>>>>>> 94c46228615bba750db54611075130a0d9d2d7d0
+- [x] Create PostgreSQL database schema
+- [x] Implement SQLAlchemy models
 - [ ] Set up database migrations
 - [ ] Configure database encryption
 - [ ] Implement audit logging triggers
