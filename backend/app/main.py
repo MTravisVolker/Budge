@@ -16,19 +16,21 @@ from pathlib import Path
 from app.auth.routes import router as auth_router
 from app.database import init_db, close_db
 from app.config import get_settings
+from app.middleware.rate_limit import RateLimitMiddleware
+from app.middleware.error_handler import ErrorHandlerMiddleware
+from app.core.scheduler import init_scheduler
+from app.core.logging import setup_logging
 
 settings = get_settings()
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('app.log')
-    ]
+# Setup logging
+setup_logging(
+    log_file=os.path.join("logs", "app.log"),
+    level=logging.INFO if not settings.DEBUG else logging.DEBUG
 )
-logger = logging.getLogger(__name__)
+
+# Get the root logger
+logger = logging.getLogger()
 
 # Initialize rate limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -36,23 +38,88 @@ limiter = Limiter(key_func=get_remote_address)
 # Create FastAPI application with comprehensive settings
 app = FastAPI(
     title="Budg API",
-    description="API for Budg - A Personal Budget Management Application",
+    description="""
+    ## Budg - Personal Budget Management API
+
+    A comprehensive API for managing personal finances, including:
+
+    - User authentication and authorization
+    - Bank account management
+    - Bill tracking and management
+    - Category organization
+    - Recurrence patterns for bills
+    - Status tracking for bills and accounts
+
+    ### Authentication
+    - JWT-based authentication
+    - OAuth2 support (Google, GitHub)
+    - Two-factor authentication (2FA)
+
+    ### Rate Limiting
+    - 100 requests per minute per user
+    - IP-based rate limiting for unauthenticated requests
+
+    ### Security
+    - HTTPS required
+    - CORS protection
+    - Input validation
+    - SQL injection prevention
+    """,
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
-    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
+    swagger_ui_parameters={
+        "defaultModelsExpandDepth": -1,
+        "persistAuthorization": True,
+        "displayRequestDuration": True,
+        "filter": True,
+    },
     # Add security schemes
     openapi_tags=[
         {
             "name": "auth",
-            "description": "Authentication and authorization endpoints",
+            "description": "Authentication and authorization endpoints for user management",
         },
         {
             "name": "users",
-            "description": "User management endpoints",
+            "description": "User profile and account management endpoints",
+        },
+        {
+            "name": "bank-accounts",
+            "description": "Bank account management and tracking endpoints",
+        },
+        {
+            "name": "bills",
+            "description": "Bill management and tracking endpoints",
+        },
+        {
+            "name": "categories",
+            "description": "Category management for organizing bills",
+        },
+        {
+            "name": "recurrences",
+            "description": "Recurrence pattern management for bills",
+        },
+        {
+            "name": "statuses",
+            "description": "Status management for bills and accounts",
+        },
+        {
+            "name": "mfa",
+            "description": "Two-factor authentication management",
         },
     ],
+    contact={
+        "name": "Budg Support",
+        "url": "https://budg.app/support",
+        "email": "support@budg.app",
+    },
+    license_info={
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    terms_of_service="https://budg.app/terms",
 )
 
 # Add rate limiter to the app
@@ -107,6 +174,15 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Add HTTPS redirect middleware
 app.add_middleware(HTTPSRedirectMiddleware)
+
+# Add rate limiting middleware
+app.add_middleware(RateLimitMiddleware)
+
+# Add error handling middleware
+app.add_middleware(ErrorHandlerMiddleware)
+
+# Initialize background task scheduler
+init_scheduler(app)
 
 # Include auth routes
 app.include_router(auth_router)

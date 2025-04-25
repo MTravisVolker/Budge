@@ -16,6 +16,12 @@ class Settings(BaseSettings):
     POSTGRES_PORT: str = "5432"
     POSTGRES_DB: str = "budget_app"
 
+    # Encryption Settings
+    ENCRYPTION_KEY: str = os.getenv("ENCRYPTION_KEY", "your-encryption-key-here")  # Change this in production
+    ENCRYPTION_ALGORITHM: str = "aes-256-cbc"
+    ENCRYPTION_IV_LENGTH: int = 16
+    ENCRYPTION_KEY_ROTATION_DAYS: int = 90
+
     @property
     def database_url(self) -> str:
         """Get database URL from environment variables or use default"""
@@ -41,6 +47,15 @@ class Settings(BaseSettings):
 
     # Frontend settings
     FRONTEND_URL: str = "http://localhost:3000"  # Default frontend URL
+
+    # Redis settings
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+    REDIS_PASSWORD: Optional[str] = None
+
+    # Rate limiting settings
+    RATE_LIMIT_USER: int = 100  # requests per minute per user
+    RATE_LIMIT_IP: int = 200    # requests per minute per IP
 
     class Config:
         env_file = ".env"

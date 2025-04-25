@@ -1,9 +1,10 @@
 from datetime import datetime
 from typing import Any
-from sqlalchemy import DateTime, func
+from sqlalchemy import DateTime, func, String, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from uuid import uuid4
+from .user import User  # Import User for type hints
 
 class Base(DeclarativeBase):
     """Base class for all models"""
@@ -34,3 +35,15 @@ class Base(DeclarativeBase):
     def __repr__(self) -> str:
         """String representation of the model"""
         return f"<{self.__class__.__name__}({self.to_dict()})>"
+
+class AuditLogMixin:
+    """Mixin for models that need audit logging"""
+    user_id: Mapped[UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True
+    )
+
+    # Relationship
+    user: Mapped["User"] = relationship(back_populates="audit_logs")

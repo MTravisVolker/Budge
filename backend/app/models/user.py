@@ -1,9 +1,23 @@
 from typing import Optional
-from sqlalchemy import String, Boolean
+from sqlalchemy import String, Boolean, Column, Integer, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
 from uuid import uuid4
 from .base import Base
+from .api_token import ApiToken
+from .oauth_account import OAuthAccount
+from .audit_log import AuditLog
+from .bank_account import BankAccount
+from .bank_account_instance import BankAccountInstance
+from .bills import Bill
+from .due_bills import DueBill
+from .category import Category
+from .recurrence import Recurrence
+from .bill_status import BillStatus
+from .budget import Budget
+from .account import Account
+from .transaction import Transaction
 
 class User(Base):
     """User model"""
@@ -38,6 +52,23 @@ class User(Base):
         Boolean,
         default=False,
         nullable=False,
+    )
+    created_at: Mapped[Optional[DateTime]] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now()
+    )
+    updated_at: Mapped[Optional[DateTime]] = mapped_column(
+        DateTime(timezone=True),
+        onupdate=func.now()
+    )
+    mfa_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False,
+    )
+    mfa_secret: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
     )
 
     # OAuth fields
@@ -75,3 +106,6 @@ class User(Base):
     categories: Mapped[list["Category"]] = relationship(back_populates="user")
     recurrences: Mapped[list["Recurrence"]] = relationship(back_populates="user")
     bill_statuses: Mapped[list["BillStatus"]] = relationship(back_populates="user")
+    budgets: Mapped[list["Budget"]] = relationship(back_populates="user")
+    accounts: Mapped[list["Account"]] = relationship(back_populates="user")
+    transactions: Mapped[list["Transaction"]] = relationship(back_populates="user")

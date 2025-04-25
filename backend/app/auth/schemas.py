@@ -1,6 +1,6 @@
 from typing import Optional
 from fastapi_users import schemas
-from pydantic import EmailStr
+from pydantic import EmailStr, BaseModel, constr
 
 class UserRead(schemas.BaseUser[int]):
     """User read schema"""
@@ -34,3 +34,24 @@ class UserUpdate(schemas.BaseUserUpdate):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     avatar_url: Optional[str] = None
+
+class PasswordResetRequest(BaseModel):
+    """Request password reset"""
+    email: EmailStr
+
+class PasswordResetVerify(BaseModel):
+    """Verify password reset token"""
+    token: str
+
+class PasswordResetComplete(BaseModel):
+    """Complete password reset"""
+    token: str
+    new_password: constr(min_length=8)
+
+class MFAEnableRequest(BaseModel):
+    """Request to enable MFA"""
+    pass
+
+class MFAVerifyRequest(BaseModel):
+    """Request to verify MFA setup"""
+    code: constr(min_length=6, max_length=6)
