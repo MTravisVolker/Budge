@@ -3,6 +3,10 @@ from sqlalchemy import String, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
+from .user import User
+from .bills import Bill
+from .budget import Budget
+from .transaction import Transaction
 
 class Category(Base):
     """Category model"""
@@ -29,3 +33,5 @@ class Category(Base):
     # Relationships
     user: Mapped["User"] = relationship(back_populates="categories")
     bills: Mapped[list["Bill"]] = relationship(back_populates="category")
+    budgets: Mapped[list["Budget"]] = relationship(back_populates="category")
+    transactions: Mapped[list["Transaction"]] = relationship(back_populates="category")

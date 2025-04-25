@@ -4,15 +4,12 @@
 
 ### Project Setup
 
-<<<<<<< HEAD
-
 - [ ] Create GitHub repository with monorepo structure
 - [ ] Initialize Git with `.gitignore` for Python, Node.js, and development files
 - [ ] # Set up branch protection rules (require PRs, signed commits)
 - [x] Create GitHub repository with monorepo structure
 - [x] Initialize Git with `.gitignore` for Python, Node.js, and development files
 - [x] Set up branch protection rules (require PRs, signed commits)
-  > > > > > > > 94c46228615bba750db54611075130a0d9d2d7d0
 - [x] Create initial project structure:
   ```
   budg/
@@ -58,7 +55,7 @@
 
 - [x] Create PostgreSQL database schema
 - [x] Implement SQLAlchemy models
-- [ ] Set up database migrations
+- [X] Set up database migrations
 - [ ] Configure database encryption
 - [ ] Implement audit logging triggers
 
